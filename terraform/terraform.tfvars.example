@@ -1,0 +1,24 @@
+allowed_ips = [
+  "1.1.1.1/32",
+  "192.168.1.0/24",
+]
+
+aws_az = "eu-west-2a"
+
+aws_region = "eu-west-2"
+
+aws_profile = "re-build-systems"
+
+dockerversion = "18.03.1~ce-0~ubuntu"
+
+environment = "dev"
+
+gitrepo = "https://github.com/alphagov/re-build-systems-config.git"
+
+hostname_suffix = "example.com"
+
+product = "re-build-systems"
+
+server_name = "jenkins2"
+
+ubuntu_release = "xenial-16.04-amd64-server"
