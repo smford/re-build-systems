@@ -78,7 +78,7 @@ brew install awscli python3
 2. Create ~/.aws/credentials file:
 
 ```
-[re-ci-mission]
+[re-build-systems]
 aws_access_key_id = AABBCCDDEEFFG
 aws_secret_access_key = abcdefghijklmnopqrstuvwxyz1234567890
 ```
