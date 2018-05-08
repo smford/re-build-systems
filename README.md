@@ -40,7 +40,7 @@ Access container as root user:
 2. Configure your ~/.aws/credentials file with your own details:
 
 ```
-[re-ci-mission]
+[re-build-systems]
 aws_access_key_id = AABBCCDDEEFFG
 aws_secret_access_key = abcdefghijklmnopqrstuvwxyz1234567890
 ```
