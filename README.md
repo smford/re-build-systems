@@ -98,10 +98,13 @@ _Where the `-e` parameter is the name of the environment._
 
 The `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are those from the ~/.aws/credentials file. The
 
+In your working copy of this repo:
+
 ```
 export AWS_ACCESS_KEY_ID="someaccesskey"
 export AWS_SECRET_ACCESS_KEY="mylittlesecretkey"
 export AWS_DEFAULT_REGION="eu-west-2"
+cd terraform
 terraform init -backend-config="region=eu-west-2" -backend-config="bucket=tfstate-re-build-systems-test" -backend-config="key=re-ci-mission.tfstate"
 terraform plan -out my-plan
 terraform apply my-plan
