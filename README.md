@@ -1,9 +1,5 @@
 # Reliability Engineering CI Mission
 
-## Important Links
-
-* [Kick Off Document](https://docs.google.com/document/d/1s12pKTy34n3MKKaUhABhioFwi03Q-PdAsWi1tNck0DA/edit)
-
 ---
 ## Requirements
 
@@ -111,8 +107,3 @@ terraform apply my-plan
 ```
 
 _Where the `-backend-config` parameter is appended with the name of the environment specified in the command in step 3 above._
-
-## Sample app
-
-A sample Java (Maven) app with a Jenkinsfile can be found at https://github.com/alphagov/re-build-systems-sample-java-app with
-a Jenkins library hosted at https://github.com/alphagov/re-build-systems-sample-jenkins-library
