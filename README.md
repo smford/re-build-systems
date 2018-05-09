@@ -1,10 +1,11 @@
 # Reliability Engineering CI Mission
 
-## Important Links
-
-* [Kick Off Document](https://docs.google.com/document/d/1s12pKTy34n3MKKaUhABhioFwi03Q-PdAsWi1tNck0DA/edit)
-
 ---
+
+## Contributing
+
+Refer to our [Contributing guide](CONTRIBUTING.md).
+
 ## Requirements
 
 - Docker >= v18.03.0
@@ -54,19 +55,6 @@ terraform plan
 terraform apply
 ```
 
-## Pre-commit checks
-
-The main goal of this is to keep committed code tidy.
-
-This is optional but highly recommended, especially if you would like to contribute.
-
-```
-brew install pre-commit
-cd [your_git_working_copy]
-pre-commit install --install-hooks
-pre-commit autoupdate
-```
-
 ## Provisioning a new AWS Environment
 
 1. Install awscli:
@@ -111,8 +99,3 @@ terraform apply my-plan
 ```
 
 _Where the `-backend-config` parameter is appended with the name of the environment specified in the command in step 3 above._
-
-## Sample app
-
-A sample Java (Maven) app with a Jenkinsfile can be found at https://github.com/alphagov/re-build-systems-sample-java-app with
-a Jenkins library hosted at https://github.com/alphagov/re-build-systems-sample-jenkins-library
