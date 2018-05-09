@@ -99,3 +99,7 @@ terraform apply my-plan
 ```
 
 _Where the `-backend-config` parameter is appended with the name of the environment specified in the command in step 3 above._
+
+## Licence
+
+[MIT License](LICENCE)
