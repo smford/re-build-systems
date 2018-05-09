@@ -1,6 +1,11 @@
 # Reliability Engineering CI Mission
 
 ---
+
+## Contributing
+
+Refer to our [Contributing guide](CONTRIBUTING.md).
+
 ## Requirements
 
 - Docker >= v18.03.0
@@ -48,19 +53,6 @@ cd terraform
 terraform init
 terraform plan
 terraform apply
-```
-
-## Pre-commit checks
-
-The main goal of this is to keep committed code tidy.
-
-This is optional but highly recommended, especially if you would like to contribute.
-
-```
-brew install pre-commit
-cd [your_git_working_copy]
-pre-commit install --install-hooks
-pre-commit autoupdate
 ```
 
 ## Provisioning a new AWS Environment
