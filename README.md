@@ -26,76 +26,77 @@ To access the instance browse to [here](http://localhost:8000)
 For debugging, you can either:
 
 * access container as jenkins user:
-```docker exec -u 1000 -it myjenkins /bin/bash```
+`docker exec -u 1000 -it myjenkins /bin/bash`
 
 * access container as root user:
-```docker exec -it myjenkins /bin/bash```
+`docker exec -it myjenkins /bin/bash`
 
 
-## Using Terraform
+## Provisioning Jenkins2 on AWS
 
-1. Download and install terraform v0.11.7
-2. Configure your ~/.aws/credentials file with your own details:
+This will provision a containerized Jenkins instance on AWS.
 
-```
-[re-build-systems]
-aws_access_key_id = AABBCCDDEEFFG
-aws_secret_access_key = abcdefghijklmnopqrstuvwxyz1234567890
-```
+1. Have the dependencies installed:
 
-3. Run terraform
+    * Terraform v0.11.7
 
-```
-cd terraform
-terraform init
-terraform plan
-terraform apply
-```
+    * `brew install awscli python3`
 
-## Provisioning a new AWS Environment
+1. Configure your ~/.aws/credentials file with your own details:
 
-1. Install awscli:
+    ```
+    [re-build-systems]
+    aws_access_key_id = AABBCCDDEEFFG
+    aws_secret_access_key = abcdefghijklmnopqrstuvwxyz1234567890
+    ```
 
-```
-brew install awscli python3
-```
+    Be careful not to use quotes in the above.
 
-2. Create ~/.aws/credentials file:
+1. Decide on an environment name, which will be referred as `[environment-name]` from now on.
+That is usually something like `test`, `staging`, `production` or your name if you are doing development or testing (e.g. `daniele`).
 
-```
-[re-build-systems]
-aws_access_key_id = AABBCCDDEEFFG
-aws_secret_access_key = abcdefghijklmnopqrstuvwxyz1234567890
-```
+1. Have an "config directory" for your sensitive data with this structure (e.g. a checked-out repository):
 
-Be careful not to use quotes in the above.
+    ```
+    |-- re-build-system            <-- this repository
+    |-- configuration-directory
+    |   |-- terraform
+    |       |-- keys               <-- your public keys are in this directory
+    |       |-- terraform.tfvars
+    
+    ```
 
-3. Create S3 bucket to host terraform state file:
+1. Create S3 bucket to host terraform state file:
 
-```
-cd [your_git_working_copy]
-terraform/tools/create-s3-state-bucket -b re-build-systems -e test -p re-build-systems
-```
+    ```
+    cd [your_git_working_copy]
+    terraform/tools/create-s3-state-bucket -b re-build-systems -e [environment-name] -p re-build-systems
+    ```
 
-_Where the `-e` parameter is the name of the environment._
+1. Export secrets
 
-4. Initialise terraform to use S3 Bucket, then plan and apply
+    In order to initialise with Terraform the S3 bucket we have created, we need to export some secrets from the `~/.aws/credentials` file.
 
-The `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are those from the ~/.aws/credentials file. The
+    ```
+    export AWS_ACCESS_KEY_ID="someaccesskey"
+    export AWS_SECRET_ACCESS_KEY="mylittlesecretkey"
+    export AWS_DEFAULT_REGION="eu-west-2"
+    ```
 
-In your working copy of this repo:
+1. Run Terraform
 
-```
-export AWS_ACCESS_KEY_ID="someaccesskey"
-export AWS_SECRET_ACCESS_KEY="mylittlesecretkey"
-export AWS_DEFAULT_REGION="eu-west-2"
-cd terraform
-terraform init -backend-config="region=eu-west-2" -backend-config="bucket=tfstate-re-build-systems-test" -backend-config="key=re-ci-mission.tfstate"
-terraform plan -out my-plan
-terraform apply my-plan
-```
+    ```
+    cd terraform
+    terraform init -backend-config="region=eu-west-2" -backend-config="bucket=tfstate-re-build-systems-[environment-name]" -backend-config="key=re-build-systems.tfstate"
+    terraform plan -out my-plan
+    terraform apply my-plan -var-file=../../re-build-systems-config/terraform/terraform.tfvars
+    ```
 
-_Where the `-backend-config` parameter is appended with the name of the environment specified in the command in step 3 above._
+1. Use Jenkins
+
+    * Visit the Jenkins installation at `http://...` [TODO]
+    
+    * SSH into the instance with `ssh -i [path-to-your-private-ssh-key] ubuntu@[instance-ip]`
 
 ## Licence
 
