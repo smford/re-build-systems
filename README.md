@@ -1,19 +1,18 @@
 # Reliability Engineering - Build Systems
 
----
+This repository provides the infrastructure code for provisioning a containerised Jenkins instance on either a laptop or AWS.
 
 ## Contributing
 
 Refer to our [Contributing guide](CONTRIBUTING.md).
 
-## Requirements
+## Provisioning Jenkins2 on your laptop for development
 
-- Docker >= v18.03.0
-- pre-commit 1.8.2
-- Terraform >= v0.11.7
+Skip this section if you are just trying to provision a Terraform plaftorm to use for your project.
 
-## Spinning up Jenkins2
+This will provision a Docker container running Jenkins2 on your laptop.
 
+You need `docker` >= `v18.03.0`
 
 ```
 cd docker
@@ -21,17 +20,15 @@ docker build -t="jenkins/jenkins-re" .
 docker run --name myjenkins -ti -p 8000:80 -p 50000:50000 jenkins/jenkins-re:latest
 ```
 
-## Accessing
-
-Browse to [here](http://localhost:8000)
+To access the instance browse to [here](http://localhost:8000)
 
 
-## Debugging
+For debugging, you can either:
 
-Access container as jenkins user:
+* access container as jenkins user:
 ```docker exec -u 1000 -it myjenkins /bin/bash```
 
-Access container as root user:
+* access container as root user:
 ```docker exec -it myjenkins /bin/bash```
 
 
