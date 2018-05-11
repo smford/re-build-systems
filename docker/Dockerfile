@@ -27,7 +27,7 @@ COPY files/plugins.txt /usr/share/jenkins/ref/plugins.txt
 COPY files/executors.groovy /usr/share/jenkins/ref/init.groovy.d/executors.groovy
 
 # enable logging
-COPY files/log.properties /var/jenkins_home/log.properties
+COPY files/log.properties /usr/share/jenkins/ref/log.properties
 
 # disable security
 #COPY config.xml  /usr/share/jenkins/ref/config.xml
