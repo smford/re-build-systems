@@ -11,8 +11,6 @@ aws_profile = "re-build-systems"
 
 dockerversion = "18.03.1~ce-0~ubuntu"
 
-environment = "dev"
-
 gitrepo = "https://github.com/alphagov/re-build-systems-config.git"
 
 hostname_suffix = "example.com"
