@@ -55,7 +55,7 @@ This will provision a containerized Jenkins instance on AWS.
 1. Decide on an environment name, which will be referred as `[environment-name]` from now on.
 That is usually something like `test`, `staging`, `production` or your name if you are doing development or testing (e.g. `daniele`).
 
-1. Have an "config directory" for your sensitive data with this structure (e.g. a checked-out repository):
+1. Have a "config directory" for your sensitive data with this structure (e.g. a checked-out repository):
 
     ```
     |-- re-build-system            <-- this repository
@@ -88,15 +88,20 @@ That is usually something like `test`, `staging`, `production` or your name if y
     ```
     cd terraform
     terraform init -backend-config="region=eu-west-2" -backend-config="bucket=tfstate-re-build-systems-[environment-name]" -backend-config="key=re-build-systems.tfstate"
-    terraform plan -out my-plan
-    terraform apply my-plan -var-file=../../re-build-systems-config/terraform/terraform.tfvars
+    terraform apply -var-file=../../re-build-systems-config/terraform/terraform.tfvars  -var environment=[environment-name]
     ```
 
-1. Use Jenkins
+1. Use the new Jenkins instance
 
-    * Visit the Jenkins installation at `http://...` [TODO]
+    The previous `terraform apply` output some values. The most interesting is `jenkins2_eip`.
+
+    * Visit the Jenkins installation at `http://[jenkins2_eip]`
     
-    * SSH into the instance with `ssh -i [path-to-your-private-ssh-key] ubuntu@[instance-ip]`
+    * SSH into the instance with `ssh -i [path-to-your-private-ssh-key] ubuntu@[jenkins2_eip]`
+        * Contact the `RE Build Tools` team to get the private key.
+        * To switch to the root user, run `sudo su -`
+    
+
 
 ## Licence
 
