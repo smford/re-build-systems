@@ -101,6 +101,13 @@ That is usually something like `test`, `staging`, `production` or your name if y
         * Contact the `RE Build Tools` team to get the private key.
         * To switch to the root user, run `sudo su -`
     
+### Recommandations
+
+This is a list of things you may consider doing next:
+
+* implement HTTPS
+* enable AWS CloudTrail
+* remove the default `ubuntu` account from the AWS instance(s)
 
 
 ## Licence
