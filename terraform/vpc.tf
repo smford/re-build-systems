@@ -1,6 +1,6 @@
 module "jenkins2_vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "1.9.1"
+  version = "1.30.0"
 
   name = "jenkins_vpc_${var.product}-${var.environment}"
 
