@@ -63,7 +63,7 @@ That is usually something like `test`, `staging`, `production` or your name if y
     |   |-- terraform
     |       |-- keys               <-- your public keys are in this directory
     |       |-- terraform.tfvars
-    
+
     ```
 
 1. Create S3 bucket to host terraform state file:
@@ -91,16 +91,37 @@ That is usually something like `test`, `staging`, `production` or your name if y
     terraform apply -var-file=../../re-build-systems-config/terraform/terraform.tfvars  -var environment=[environment-name]
     ```
 
+  You should see output like this:
+
+  >null_resource.get_public_dns_name (local-exec): public_dns name =  
+  null_resource.get_public_dns_name (local-exec): [  
+  null_resource.get_public_dns_name (local-exec):     <b>"ec2-11-222-333-444.us-east-1.compute.amazonaws.com"</b>  
+  null_resource.get_public_dns_name (local-exec): ]  
+  null_resource.get_public_dns_name: Creation complete after 1s (ID: 1111111111111111111)  
+  aws_eip.jenkins2_eip: Creation complete after 1s (ID: eipalloc-11111111111111111)  
+
+  >Apply complete! Resources: 19 added, 0 changed, 0 destroyed.  
+
+  >Outputs:  
+
+  >image_id = ami-11111111  
+  jenkins2_eip = <b>11.222.333.444</b>  
+  jenkins2_security_group_id = sg-11111111111111111  
+  jenkins2_vpc_id = vpc-11111111111111111  
+  public_subnets = [  
+      subnet-11111111111111111  
+  ]
+
 1. Use the new Jenkins instance
 
-    The previous `terraform apply` output some values. The most interesting is `jenkins2_eip`.
+    The previous `terraform apply` outputs some values. The most useful are the `jenkins2_eip` and `public_dns_name` (values of these are printed in bold in the example output above).
 
-    * Visit the Jenkins installation at `http://[jenkins2_eip]`
-    
+    * Visit the Jenkins installation at `http://[public_dns_name]` or `http://[jenkins2_eip]`
+
     * SSH into the instance with `ssh -i [path-to-your-private-ssh-key] ubuntu@[jenkins2_eip]`
         * Contact the `RE Build Tools` team to get the private key.
         * To switch to the root user, run `sudo su -`
-    
+
 ### Recommandations
 
 This is a list of things you may consider doing next:
