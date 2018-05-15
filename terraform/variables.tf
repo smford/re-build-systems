@@ -49,6 +49,11 @@ variable "server_name" {
   type        = "string"
 }
 
+variable "server_storage_jenkins" {
+  description = "Persistent Storage for the Jenkins Server"
+  type        = "string"
+}
+
 variable "ubuntu_release" {
   description = "Which version of ubuntu to install"
   type        = "string"

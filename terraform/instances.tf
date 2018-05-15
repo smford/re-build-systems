@@ -51,7 +51,7 @@ data "aws_ami" "source" {
 }
 
 data "template_file" "docker-jenkins2-server-template" {
-  template = "${file("cloud-init/${var.ubuntu_release}.yaml")}"
+  template = "${file("cloud-init/master-${var.ubuntu_release}.yaml")}"
 
   vars {
     dockerversion = "${var.dockerversion}"
@@ -60,4 +60,27 @@ data "template_file" "docker-jenkins2-server-template" {
     hostname      = "${var.server_name}.${var.hostname_suffix}"
     region        = "${var.aws_region}"
   }
+}
+
+resource "aws_ebs_volume" "jenkins2_server_storage" {
+  availability_zone = "${var.aws_az}"
+  size              = "${var.server_storage_jenkins}"
+  type              = "gp2"
+
+  lifecycle {
+    ignore_changes = ["size", "type"]
+  }
+
+  tags {
+    Environment = "${var.environment}"
+    ManagedBy   = "terraform"
+    Name        = "jenkins2_ebs_${var.product}_${var.environment}"
+    Product     = "${var.product}"
+  }
+}
+
+resource "aws_volume_attachment" "jenkins2_server_storage_attachment" {
+  device_name = "/dev/xvdf"
+  volume_id   = "${aws_ebs_volume.jenkins2_server_storage.id}"
+  instance_id = "${element(module.jenkins2_server.id,0)}"
 }

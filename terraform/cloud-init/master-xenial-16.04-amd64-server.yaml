@@ -9,6 +9,38 @@ random_seed:
   command: ['sh', '-c', '(ec2metadata && date +%s%3N) | sha256sum > /dev/urandom']
   command_required: True
 locale: en_GB.UTF-8
+write_files:
+  - content: |
+      #!/usr/bin/env bash
+      echo "Waiting until EBS attachment to instance complete"
+      while [ ! -e /dev/xvdf ]; do sleep 1; done
+      check_xvdf=$(lsblk /dev/xvdf -no KNAME,FSTYPE|tr -d '[:space:]'|tr a-z A-Z)
+      if [ ! x"$check_xvdf" == "xXVDFEXT4" ]; then
+        echo "New EBS volume detected, formating"
+        mkfs.ext4 -F -m 0 -O dir_index,sparse_super,uninit_bg -q /dev/xvdf
+      else
+        echo "/dev/xvdf Already formatted, skipping"
+      fi
+      fstab_string='/dev/xvdf /mnt/jenkins-ebs ext4 defaults,nofail,nobootwait 0 2'
+      grepresult=$(grep -x -F -c '/dev/xvdf /mnt/jenkins-ebs ext4 defaults,nofail,nobootwait 0 2' /etc/fstab)
+      if [ $grepresult -eq 0 ]; then
+        echo "Adding mountpoint to fstab"
+        echo "$fstab_string" | tee -a /etc/fstab
+      fi
+      if [ ! -d /mnt/jenkins-ebs ]; then
+        echo "Creating mountpoint /mnt/jenkins-ebs"
+        mkdir -p /mnt/jenkins-ebs
+        chown 1000:1000 /mnt/jenkins-ebs
+      fi
+      if [ ! $(mount | grep xvdf | wc -l) == "1" ]; then
+        echo "Mounting /dev/xvdf on /mnt/jenkins-ebs"
+        mount -t ext4 /dev/xvdf /mnt/jenkins-ebs
+        chown 1000:1000 /mnt/jenkins-ebs
+      else
+        echo "/dev/xvdf Already mounted, skipping"
+      fi
+    path: /usr/local/bin/mount-xvdf
+    permissions: '0555'
 apt_preserve_sources_list: true
 apt_sources:
  - source: "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
@@ -195,4 +227,5 @@ runcmd:
   - [ mkdir, /docker ]
   - git clone ${gitrepo} /docker
   - [ docker, build, -t=jenkins/jenkins-re, "/docker/docker" ]
+  - /usr/local/bin/mount-xvdf
   - [ docker, run, --name, myjenkins, -d, -p, "80:80", -p, "50000:50000", "jenkins/jenkins-re:latest" ]
