@@ -4,7 +4,7 @@ module "jenkins2_server" {
   name                        = "${var.server_name}.${var.environment}.${var.hostname_suffix}"
   ami                         = "${data.aws_ami.source.id}"
   instance_type               = "${var.instance_type}"
-  associate_public_ip_address = false
+  associate_public_ip_address = true
   user_data                   = "${data.template_file.docker-jenkins2-server-template.rendered}"
   key_name                    = "jenkins2_key_${var.product}-${var.environment}"
   monitoring                  = true
