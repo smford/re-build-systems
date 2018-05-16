@@ -17,6 +17,8 @@ write_files:
       check_xvdf=$(lsblk /dev/xvdf -no KNAME,FSTYPE|tr -d '[:space:]'|tr a-z A-Z)
       if [ ! x"$check_xvdf" == "xXVDFEXT4" ]; then
         echo "New EBS volume detected, formating"
+        # Note: We are formatting the raw device rather than a partition on the raw device
+        #       This allows for easier and simpler disk expansion in the future
         mkfs.ext4 -F -m 0 -O dir_index,sparse_super,uninit_bg -q /dev/xvdf
       else
         echo "/dev/xvdf Already formatted, skipping"
@@ -39,7 +41,7 @@ write_files:
       else
         echo "/dev/xvdf Already mounted, skipping"
       fi
-    path: /usr/local/bin/mount-xvdf
+    path: /usr/local/bin/mount-persistent-storage
     permissions: '0555'
 apt_preserve_sources_list: true
 apt_sources:
@@ -227,5 +229,5 @@ runcmd:
   - [ mkdir, /docker ]
   - git clone ${gitrepo} /docker
   - [ docker, build, -t=jenkins/jenkins-re, "/docker/docker" ]
-  - /usr/local/bin/mount-xvdf
+  - /usr/local/bin/mount-persistent-storage
   - [ docker, run, --name, myjenkins, -d, -p, "80:80", -p, "50000:50000", -v, "/mnt/jenkins-ebs:/var/jenkins_home", "jenkins/jenkins-re:latest" ]

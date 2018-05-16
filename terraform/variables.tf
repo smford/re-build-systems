@@ -49,19 +49,19 @@ variable "server_name" {
   type        = "string"
 }
 
-variable "server_storage_jenkins" {
-  description = "Persistent Storage for the Jenkins Server"
+variable "server_persistent_storage_size" {
+  description = "Size for the persistent storage for the Jenkins Server (GB)"
+  type        = "string"
+  default     = "50"
+}
+
+variable "server_root_volume_size" {
+  description = "Size of the Jenkins Server root volume (GB)"
   type        = "string"
   default     = "50"
 }
 
 variable "ubuntu_release" {
-  description = "Which version of ubuntu to install"
+  description = "Which version of ubuntu to install on Jenkins Server"
   type        = "string"
-}
-
-variable "volume_size" {
-  description = "This defines the default (aws) instance's root volume size."
-  type        = "string"
-  default     = "50"
 }

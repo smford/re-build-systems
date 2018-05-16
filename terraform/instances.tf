@@ -12,7 +12,7 @@ module "jenkins2_server" {
   subnet_id                   = "${element(module.jenkins2_vpc.public_subnets,0)}"
 
   root_block_device = [{
-    volume_size           = "${var.volume_size}"
+    volume_size           = "${var.server_root_volume_size}"
     delete_on_termination = "true"
   }]
 
@@ -64,7 +64,7 @@ data "template_file" "docker-jenkins2-server-template" {
 
 resource "aws_ebs_volume" "jenkins2_server_storage" {
   availability_zone = "${var.aws_az}"
-  size              = "${var.server_storage_jenkins}"
+  size              = "${var.server_persistent_storage_size}"
   type              = "gp2"
 
   lifecycle {
