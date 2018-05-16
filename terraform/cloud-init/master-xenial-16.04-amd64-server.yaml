@@ -228,4 +228,4 @@ runcmd:
   - git clone ${gitrepo} /docker
   - [ docker, build, -t=jenkins/jenkins-re, "/docker/docker" ]
   - /usr/local/bin/mount-xvdf
-  - [ docker, run, --name, myjenkins, -d, -p, "80:80", -p, "50000:50000", "jenkins/jenkins-re:latest" ]
+  - [ docker, run, --name, myjenkins, -d, -p, "80:80", -p, "50000:50000", -v, "/mnt/jenkins-ebs:/var/jenkins_home", "jenkins/jenkins-re:latest" ]
