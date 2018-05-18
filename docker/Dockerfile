@@ -23,14 +23,10 @@ RUN chmod +x /start-jenkins.sh
 # copy list of plugins
 COPY files/plugins.txt /usr/share/jenkins/ref/plugins.txt
 
-# set the number of executors
-COPY files/executors.groovy /usr/share/jenkins/ref/init.groovy.d/executors.groovy
-
 # enable logging
 COPY files/log.properties /usr/share/jenkins/ref/log.properties
 
-# disable security
-#COPY config.xml  /usr/share/jenkins/ref/config.xml
+COPY files/config.xml  /usr/share/jenkins/ref/config.xml
 
 # import jobs
 COPY jobs/ /usr/share/jenkins/ref/jobs/
