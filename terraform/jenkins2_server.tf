@@ -100,4 +100,3 @@ resource "aws_route53_record" "jenkins2_server_private" {
   ttl     = "3600"
   records = ["${module.jenkins2_server.private_ip}"]
 }
-

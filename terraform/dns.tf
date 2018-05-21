@@ -11,7 +11,7 @@ resource "aws_route53_zone" "private_facing" {
 }
 
 resource "aws_route53_zone" "public_facing" {
-  name   = "build.gds-reliability.engineering"
+  name = "build.gds-reliability.engineering"
 
   tags {
     Environment = "${var.environment}"

@@ -16,7 +16,7 @@ module "jenkins2_security_group" {
       to_port     = 50000
       protocol    = "tcp"
       description = "Docker hosts talking back to master"
-      cidr_blocks = "10.0.101.128/32"
+      cidr_blocks = "${module.jenkins2_worker.private_ip}/32"
     },
     {
       from_port   = 2375
@@ -24,6 +24,13 @@ module "jenkins2_security_group" {
       protocol    = "tcp"
       description = "master talking to docker agent"
       cidr_blocks = "10.0.101.0/24"
+    },
+    {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      description = "Docker hosts talking back to master http"
+      cidr_blocks = "${module.jenkins2_worker.private_ip}/32"
     },
   ]
 }

@@ -22,6 +22,11 @@ output "jenksin2_worker_private_ip" {
   value       = ["${module.jenkins2_worker.private_ip}"]
 }
 
+output "jenksin2_worker_public_ip" {
+  description = "jenkins2 worker public ip"
+  value       = ["${module.jenkins2_worker.public_ip}"]
+}
+
 output "jenkins2_security_group_id" {
   description = "jenkins2 default security group id"
   value       = "${module.jenkins2_security_group.this_security_group_id}"
