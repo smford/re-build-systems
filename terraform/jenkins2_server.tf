@@ -3,12 +3,12 @@ module "jenkins2_server" {
   version                     = "1.5.0"
   name                        = "${var.server_name}.${var.environment}.${var.hostname_suffix}"
   ami                         = "${data.aws_ami.source.id}"
-  instance_type               = "${var.instance_type}"
+  instance_type               = "${var.server_instance_type}"
   associate_public_ip_address = true
   user_data                   = "${data.template_file.docker-jenkins2-server-template.rendered}"
   key_name                    = "jenkins2_key_${var.product}-${var.environment}"
   monitoring                  = true
-  vpc_security_group_ids      = ["${module.jenkins2_security_group.this_security_group_id}"]
+  vpc_security_group_ids      = ["${module.jenkins2_security_group.this_security_group_id}", "${module.jenkins2_security_group_cloudflare.this_security_group_id}"]
   subnet_id                   = "${element(module.jenkins2_vpc.public_subnets,0)}"
 
   root_block_device = [{
@@ -21,22 +21,6 @@ module "jenkins2_server" {
     ManagedBy   = "terraform"
     Name        = "jenkins2_ec2_${var.product}_${var.environment}"
     Product     = "${var.product}"
-  }
-}
-
-# This is a work-around to get the public DNS name of the eip which is assigned to this EC2 instance. If we output the public_dns directly from
-# the terraform-aws-modules/ec2-instance/aws module then it will be the DNS name that resolves to the original IPv4 address assigned to the EC2, rather than
-# the eip. This may be resolved in Terraform (using an export from aws_eip) in the future at which point this code can be removed (see
-# https://github.com/terraform-providers/terraform-provider-aws/issues/1149).
-resource "null_resource" "get_public_dns_name" {
-  triggers {
-    cluster_instance_ids = "${join(",", module.jenkins2_server.id)}"
-  }
-
-  depends_on = ["module.jenkins2_server"]
-
-  provisioner "local-exec" {
-    command = "echo 'public_dns name = ' && /usr/local/bin/aws ec2 describe-instances --instance-ids ${join(" ", module.jenkins2_server.id)} --query 'Reservations[].Instances[].PublicDnsName'"
   }
 }
 
@@ -100,3 +84,20 @@ resource "aws_volume_attachment" "jenkins2_server_storage_attachment" {
   volume_id   = "${aws_ebs_volume.jenkins2_server_storage.id}"
   instance_id = "${element(module.jenkins2_server.id,0)}"
 }
+
+#resource "aws_route53_record" "jenkins2_private" {
+#  zone_id = "${aws_route53_zone.private_facing.zone_id}"
+#  name    = "jenkins2-server"
+#  type    = "A"
+#  ttl     = "3600"
+#  records = ["${aws_eip.jenkins2_eip.public_ip}"]
+#}
+
+resource "aws_route53_record" "jenkins2_server_private" {
+  zone_id = "${aws_route53_zone.private_facing.zone_id}"
+  name    = "${var.server_name}"
+  type    = "A"
+  ttl     = "3600"
+  records = ["${module.jenkins2_server.private_ip}"]
+}
+
