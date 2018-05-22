@@ -55,16 +55,24 @@ This will provision a containerized Jenkins instance on AWS.
 1. Decide on an environment name, which will be referred as `[environment-name]` from now on.
 That is usually something like `test`, `staging`, `production` or your name if you are doing development or testing (e.g. `daniele`).
 
-1. Have a "config directory" for your sensitive data with this structure (e.g. a checked-out repository):
+1. Generate an SSH public/private key pair. This is just to bootstrap the provisioning process. 
+
+1. Have a "config directory" for your sensitive data with this structure:
 
     ```
     |-- re-build-system            <-- this repository
-    |-- configuration-directory
+    |-- re-build-system-config     <-- configuration folder
     |   |-- terraform
-    |       |-- keys               <-- your public keys are in this directory
+    |       |-- keys
     |       |-- terraform.tfvars
 
     ```
+    
+    If you are from GDS, you can checkout [this repo](https://github.com/alphagov/re-build-systems-config) as your config folder. 
+
+1. Copy the **public** key you generated in the `re-build-system-config` folder, using this name: `re-build-systems-[environment-name]-ssh-deployer.pub`.
+
+1. Customise the `terraform.tfvars` file.
 
 1. Create S3 bucket to host terraform state file:
 
@@ -119,7 +127,6 @@ That is usually something like `test`, `staging`, `production` or your name if y
     * Visit the Jenkins installation at `http://[public_dns_name]` or `http://[jenkins2_eip]`
 
     * SSH into the instance with `ssh -i [path-to-your-private-ssh-key] ubuntu@[jenkins2_eip]`
-        * Contact the `RE Build Tools` team to get the private key.
         * To switch to the root user, run `sudo su -`
 
 ### Recommandations
