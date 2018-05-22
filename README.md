@@ -91,26 +91,26 @@ That is usually something like `test`, `staging`, `production` or your name if y
     terraform apply -var-file=../../re-build-systems-config/terraform/terraform.tfvars  -var environment=[environment-name]
     ```
 
-  You should see output like this:
-
-  >null_resource.get_public_dns_name (local-exec): public_dns name =  
-  null_resource.get_public_dns_name (local-exec): [  
-  null_resource.get_public_dns_name (local-exec):     <b>"ec2-11-222-333-444.us-east-1.compute.amazonaws.com"</b>  
-  null_resource.get_public_dns_name (local-exec): ]  
-  null_resource.get_public_dns_name: Creation complete after 1s (ID: 1111111111111111111)  
-  aws_eip.jenkins2_eip: Creation complete after 1s (ID: eipalloc-11111111111111111)  
-
-  >Apply complete! Resources: 19 added, 0 changed, 0 destroyed.  
-
-  >Outputs:  
-
-  >image_id = ami-11111111  
-  jenkins2_eip = <b>11.222.333.444</b>  
-  jenkins2_security_group_id = sg-11111111111111111  
-  jenkins2_vpc_id = vpc-11111111111111111  
-  public_subnets = [  
-      subnet-11111111111111111  
-  ]
+      You should see output like this:
+    
+      >null_resource.get_public_dns_name (local-exec): public_dns name =  
+      null_resource.get_public_dns_name (local-exec): [  
+      null_resource.get_public_dns_name (local-exec):     <b>"ec2-11-222-333-444.us-east-1.compute.amazonaws.com"</b>  
+      null_resource.get_public_dns_name (local-exec): ]  
+      null_resource.get_public_dns_name: Creation complete after 1s (ID: 1111111111111111111)  
+      aws_eip.jenkins2_eip: Creation complete after 1s (ID: eipalloc-11111111111111111)  
+    
+      >Apply complete! Resources: 19 added, 0 changed, 0 destroyed.  
+    
+      >Outputs:  
+    
+      >image_id = ami-11111111  
+      jenkins2_eip = <b>11.222.333.444</b>  
+      jenkins2_security_group_id = sg-11111111111111111  
+      jenkins2_vpc_id = vpc-11111111111111111  
+      public_subnets = [  
+          subnet-11111111111111111  
+      ]
 
 1. Use the new Jenkins instance
 
